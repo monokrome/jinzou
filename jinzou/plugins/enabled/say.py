@@ -1,7 +1,7 @@
 from zope.interface import implements
 from twisted.plugin import IPlugin
 from jinzou.plugins import JinzouPlugin
-from jinzou.util.shortcuts import get_command_string
+from jinzou.util.shortcuts import get_command_string, get_reply_destination
 
 # TODO: Nicknames list should be a generator.
 
@@ -16,11 +16,7 @@ class Say(object):
     def privmsg(self, client, user, channel, message):
         """ Recieves private messages, and says things if asked to. """
 
-        if channel == client.nickname:
-            destination = user.split('!', 1)[0]
-        else:
-            destination = channel
-
+        destination = get_reply_destination(client, user, channel)
         message_info = message.split(' ', 1)
 
         if len(message_info) >= 2 and message_info[0].lower() == get_command_string('say'):
