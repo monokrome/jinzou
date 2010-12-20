@@ -13,10 +13,17 @@ class Say(object):
     implements(IPlugin, JinzouPlugin)
 
     def privmsg(self, client, user, channel, message):
+        """ Recieves private messages, and says things if asked to. """
+
+        if channel == client.nickname:
+            destination = user.split('!', 1)[0]
+        else:
+            destination = channel
+
         message_info = message.split(' ', 1)
 
-        if len(message_info) >= 2 and message_info[0] == 'say':
-            client.say(channel, message_info[1])
+        if len(message_info) >= 2 and message_info[0].lower() == 'say':
+            client.msg(destination, message_info[1])
 
 say = Say()
 
