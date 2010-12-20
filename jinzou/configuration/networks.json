@@ -3,6 +3,12 @@
 		"servers": [
 			"localhost"
 		]
+	},
+
+	"Freenode": {
+		"servers": [
+			"irc.freenode.net"
+		]
 	}
 }
 

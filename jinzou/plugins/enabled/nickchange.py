@@ -14,10 +14,10 @@ class NickChange(object):
 
     def irc_ERR_NICKNAMEINUSE(self, client, prefix, params):
         try:
-            client.nicknames.pop(0)
-            new_nickname = client.nicknames[0]
+            client.factory.nicknames.pop(0)
+            new_nickname = client.factory.nicknames[0]
 
-            client.setNick(new_nickname)
+            client.setNick(new_nickname.encode('UTF-8'))
 
         except IndexError:
             self.quit()

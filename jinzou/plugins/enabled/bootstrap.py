@@ -8,10 +8,10 @@ class BootStrap(object):
     implements(IPlugin, JinzouPlugin)
 
     def signedOn(self, client):
-        client.setNick(client.nicknames[0])
+        client.setNick(client.factory.nicknames[0])
 
-        for channel in client.channels:
-            client.join(channel)
+        for channel in client.factory.channels:
+            client.join(channel.encode('UTF-8'))
 
 bootstrapper = BootStrap()
 
