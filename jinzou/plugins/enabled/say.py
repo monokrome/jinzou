@@ -1,6 +1,7 @@
 from zope.interface import implements
 from twisted.plugin import IPlugin
 from jinzou.plugins import JinzouPlugin
+from jinzou.util.shortcuts import get_command_string
 
 # TODO: Nicknames list should be a generator.
 
@@ -22,7 +23,7 @@ class Say(object):
 
         message_info = message.split(' ', 1)
 
-        if len(message_info) >= 2 and message_info[0].lower() == 'say':
+        if len(message_info) >= 2 and message_info[0].lower() == get_command_string('say'):
             client.msg(destination, message_info[1])
 
 say = Say()
