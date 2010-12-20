@@ -7,8 +7,6 @@ class JinzouLogger(object):
 
     implements(IPlugin, JinzouPlugin)
 
-    name='jinzou_logger'
-
     def log(self, msg):
         """ Receives a message and logs it to stdout. """
 
