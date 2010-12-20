@@ -22,5 +22,5 @@ class NickChange(object):
         except IndexError:
             self.quit()
 
-logger = NickChange()
+nickchange = NickChange()
 
