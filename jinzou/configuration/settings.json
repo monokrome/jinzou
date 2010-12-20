@@ -23,6 +23,7 @@
 	],
 
 	"core": {
-		"command_format": ".{0}"
+		"command_format": ".{0}",
+		"default_quit_message": "Disconnected by user."
 	}
 }
