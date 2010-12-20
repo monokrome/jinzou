@@ -53,7 +53,7 @@ class JinzouClient(irc.IRCClient):
     # TODO: Once Twisted decides that new-style classes are worth losing
     # a bit of backwards compatibility, do something like this:
     #
-    #    def __getattribute(self, name):
+    #    def __getattribute__(self, name):
     #        return lambda *args, **kwargs: self.call_plugins(self, name, *args, **kwargs)
     #
     # But until then, we get to do this:
