@@ -52,7 +52,16 @@ class JinzouClient(irc.IRCClient):
         return plugin_list
 
 def get_plugin_handler(export):
+    """ A factory that creates a function for the provided export, and
+        returns a reference to that function in order to dynamically
+        create event handlers.
+    """
+
     def plugin_handler(self, *args, **kwargs):
+        """ A handler that can be used to make arbitrary functions that
+            reroute to call plugins.
+         """
+
         return self.call_plugins(export, *args, **kwargs)
 
     return plugin_handler
