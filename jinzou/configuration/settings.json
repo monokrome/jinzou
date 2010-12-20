@@ -1,0 +1,24 @@
+{
+	"nicknames": [
+		"unnamed",
+		"_unnamed",
+		"this_bot_is_unnamed"
+	],
+
+	"clients": [
+		{
+			"host_info": {
+				"network": "LocalHost",
+				"port": 6667,
+				"use_ssl": false
+			},
+
+			"channels": [
+				"#jinzou"
+			],
+
+			"plugins_excluded": [],
+			"plugins_allowed": []
+		}
+	]
+}
