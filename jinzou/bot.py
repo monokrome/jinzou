@@ -198,21 +198,13 @@ class JinzouClient(irc.IRCClient):
         self.call_plugins('dccAcceptResume', *args, **kwargs)
         irc.IRCClient.dccAcceptResume(self, *args, **kwargs)
 
-    def irc_ERR_NICKNAMEINUSE(self, prefix, params):
-        self.call_plugins(self, 'irc_ERR_NICKNAMEINUSE', [prefix, params])
-
-        try:
-            # TODO: Change this into a generator.
-            self.nicknames.pop(0)
-            new_nickname = self.nicknames[0]
-            self.setNick(new_nickname)
-
-        except IndexError:
-            self.quit()
-
     def irc_ERR_PASSWDMISMATCH(self, *args, **kwargs):
         self.call_plugins('irc_ERR_PASSWDMISMATCH', *args, **kwargs)
         irc.IRCClient.irc_ERR_PASSWDMISMATCH(self, *args, **kwargs)
+
+    def irc_ERR_NICKNAMEINUSE(self, *args, **kwargs):
+        self.call_plugins('irc_ERR_NICKNAMEINUSE', *args, **kwargs)
+        irc.IRCClient.irc_ERR_NICKNAMEINUSE(self, *args, **kwargs)
 
     def irc_RPL_WELCOME(self, *args, **kwargs):
         self.call_plugins('irc_RPL_WELCOME', *args, **kwargs)
@@ -456,8 +448,10 @@ class JinzouClient(irc.IRCClient):
 
             # If we've found a callable in the plugin - call it.
             if plugin_method is not False and callable(plugin_method):
-                plugin_method(*args, **kwargs)
+                if plugin_method(*args, **kwargs) is False:
+                    return False
 
+        return True
 
     @property
     def nickname(self):
