@@ -20,5 +20,9 @@
 			"plugins_excluded": [],
 			"plugins_allowed": []
 		}
-	]
+	],
+
+	"core": {
+		"command_format": ".{0}"
+	}
 }
