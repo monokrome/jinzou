@@ -14,6 +14,50 @@ class JinzouClient(irc.IRCClient):
         self.original_nicknames = self.nicknames
         self.original_channels = self.channels
 
+    def call_plugins(self, method, *args, **kwargs):
+        """ Receives an attribute name as well as args and kwargs, and calls
+            the specified method on each plugin registered with this client.
+        """
+
+        # Every plugin is passed a referece to the client as it's first arg
+        args = list(args)
+        args.insert(0, self)
+
+        for plugin in self.plugins:
+            plugin_method = getattr(plugin, method, False)
+
+            # If we've found a callable in the plugin - call it.
+            if plugin_method is not False and callable(plugin_method):
+                if plugin_method(*args, **kwargs) is False:
+                    return False
+
+        inherited_method = getattr(irc.IRCClient, method, False)
+
+        if inherited_method:
+            return inherited_method(*args, **kwargs)
+        else:
+            return True
+
+    @property
+    def nickname(self):
+        return self.nicknames[0]
+
+    @property
+    def plugins(self):
+        """ Get a list of plugins usable on this specific network. """
+
+        plugin_list = jinzou.plugins.loader.all()
+
+        return plugin_list
+
+    # TODO: Once Twisted decides that new-style classes are worth losing
+    # a bit of backwards compatibility, do something like this:
+    #
+    #    def __getattribute(self, name):
+    #        return lambda *args, **kwargs: self.call_plugins(self, name, *args, **kwargs)
+    #
+    # But until then, we get to do this:
+
     def sendLine(self, *args, **kwargs):
         self.call_plugins('sendLine', *args, **kwargs)
 
@@ -330,42 +374,6 @@ class JinzouClient(irc.IRCClient):
 
         for channel in self.channels:
             self.join(channel)
-
-    def call_plugins(self, method, *args, **kwargs):
-        """ Receives an attribute name as well as args and kwargs, and calls
-            the specified method on each plugin registered with this client.
-        """
-
-        # Every plugin is passed a referece to the client as it's first arg
-        args = list(args)
-        args.insert(0, self)
-
-        for plugin in self.plugins:
-            plugin_method = getattr(plugin, method, False)
-
-            # If we've found a callable in the plugin - call it.
-            if plugin_method is not False and callable(plugin_method):
-                if plugin_method(*args, **kwargs) is False:
-                    return False
-
-        inherited_method = getattr(irc.IRCClient, method, False)
-
-        if inherited_method:
-            return inherited_method(*args, **kwargs)
-        else:
-            return True
-
-    @property
-    def nickname(self):
-        return self.nicknames[0]
-
-    @property
-    def plugins(self):
-        """ Get a list of plugins usable on this specific network. """
-
-        plugin_list = jinzou.plugins.loader.all()
-
-        return plugin_list
 
 class JinzouFactory(protocol.ClientFactory):
     protocol = JinzouClient
